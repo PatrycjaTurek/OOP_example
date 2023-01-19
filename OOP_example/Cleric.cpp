@@ -7,7 +7,7 @@ void Cleric::ResetStats()
 	mana = maxMana;
 };
 
-Cleric::Cleric(std::string name, unsigned int level)
+Cleric::Cleric(std::string name, unsigned level)
 {
 	this->name = name;
 	this->level = level;

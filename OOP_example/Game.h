@@ -3,11 +3,11 @@
 
 class Game
 {
-	unsigned int roomsLEFT;
-	unsigned int turn;
-	unsigned int sizeOfTeam;
-	unsigned int sizeOfEnemyTeam;
-	unsigned int TurnsUntilLevelUP;
+	unsigned roomsLEFT;
+	unsigned turn;
+	unsigned sizeOfTeam;
+	unsigned sizeOfEnemyTeam;
+	unsigned TurnsUntilLevelUP;
 	std::vector<Character> EnemyTeam;
 	std::vector<Fighter> PlayerTeam;
 	Cleric* PlayersCleric;

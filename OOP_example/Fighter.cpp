@@ -5,7 +5,7 @@ Fighter::Fighter()
 {
 }
 
-Fighter::Fighter(std::string name, unsigned int level)
+Fighter::Fighter(std::string name, unsigned level)
 {
 	this->name = name;
 	this->level = level;

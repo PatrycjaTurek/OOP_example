@@ -10,7 +10,7 @@ class Cleric : public Character
 public:
 	Cleric();
 	~Cleric();
-	Cleric(std::string, unsigned int);
+	Cleric(std::string, unsigned);
 	bool FindToHeal(std::vector<Fighter> &);
 	bool Attack(Character&);
 	bool Attack(Character&, Character&);

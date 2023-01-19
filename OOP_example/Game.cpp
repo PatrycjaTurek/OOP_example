@@ -12,7 +12,7 @@ Game::Game()
 	sizeOfEnemyTeam = 2;
 	EmptyTeams();
 
-	unsigned int charactersLevel = rand()% 5 + 2;
+	unsigned charactersLevel = rand()% 5 + 2;
 
 	for (int i = 0; i < sizeOfTeam; i++)
 	{
@@ -152,7 +152,7 @@ void Game::PlayATurn()
 void Game::PrepareRoom()
 {
 	turn++;
-	unsigned int charactersLevel = rand() % (5 +turn) + turn;
+	unsigned charactersLevel = rand() % (5 +turn) + turn;
 	for (int i = 0; i < sizeOfEnemyTeam; i++)
 	{
 		Character* Enemy = new Character(("Goblin" + std::to_string(i + 1)), charactersLevel);

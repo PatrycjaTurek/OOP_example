@@ -6,15 +6,15 @@ class Character
 protected:
 
 	int health;
-	unsigned int level;
-	unsigned int maxhealth;
-	unsigned int maxmeleeDMG;
-	unsigned int maxmeleeDEF;
-	unsigned int maxmagicDEF;
+	int level;
+	int maxhealth;
+	int maxmeleeDMG;
+	int maxmeleeDEF;
+	int maxmagicDEF;
 
-	unsigned int meleeDMG;//after de/ -buffing
-	unsigned int meleeDEF;//after de/ -buffing
-	unsigned int magicDEF;//after de/ -buffing
+	int meleeDMG;//after de/ -buffing
+	int meleeDEF;//after de/ -buffing
+	int magicDEF;//after de/ -buffing
 	void ResetStats();
 	void ResetBuffs();
 
@@ -22,11 +22,11 @@ public:
 
 	Character();
 	~Character();
-	Character(std::string, unsigned int);
+	Character(std::string, int);
 	int getHealth() { return this->health; };
 //	int Attack();
 	bool Attack(Character&);
-	void GetHit(unsigned int, dmgtype);
+	void GetHit(int, dmgtype);
 	void LevelUP();
 	void DecreaseDMG(int);
 	void DecreaseDEF(int);

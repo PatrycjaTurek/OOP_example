@@ -1,6 +1,6 @@
 #include "Character.h"
 
-Character::Character(std::string name, unsigned int level)
+Character::Character(std::string name, int level)
 {
 //	this->level = level;
 	this->level = 1;
@@ -59,9 +59,17 @@ bool Character::Attack(Character& Target)
 		break;
 	}
 	}
-	std::cout << "\t" << name << " lowered " << Target.name << "'s from "<<Target.getHealth();
+	int healthTMP = Target.getHealth();
+
 	Target.GetHit(tmpDMG,physic);
-	std::cout << " to " << Target.getHealth() << std::endl;
+	if (healthTMP != Target.getHealth())
+	{
+		std::cout << "\t" << name << " lowered " << Target.name << "'s from " << Target.getHealth() << " to " << Target.getHealth() << std::endl;
+	}
+	else
+	{
+		std::cout << "\t" << name << " waged attack against " << Target.name << " but armor was too strong" << std::endl;
+	}
 	if (Target.health > 0)
 	{
 		return true;
@@ -71,7 +79,7 @@ bool Character::Attack(Character& Target)
 	//	Target.GetHit(tmpDMG,physic);
 };
 
-void Character::GetHit(unsigned int dmg, dmgtype type)
+void Character::GetHit(int dmg, dmgtype type)
 {
 	if (type == physic)
 	{
