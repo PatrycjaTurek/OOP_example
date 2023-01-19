@@ -9,12 +9,12 @@ protected:
 	unsigned int level;
 	unsigned int maxhealth;
 	unsigned int maxmeleeDMG;
-	int maxmeleeDEF;
-	int maxmagicDEF;
+	unsigned int maxmeleeDEF;
+	unsigned int maxmagicDEF;
 
 	unsigned int meleeDMG;//after de/ -buffing
-	int meleeDEF;//after de/ -buffing
-	int magicDEF;//after de/ -buffing
+	unsigned int meleeDEF;//after de/ -buffing
+	unsigned int magicDEF;//after de/ -buffing
 	void ResetStats();
 	void ResetBuffs();
 

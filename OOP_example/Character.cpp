@@ -20,11 +20,6 @@ Character::Character(std::string name, unsigned int level)
 	{
 		LevelUP();
 	}
-
-	if (name == "Goblin1")
-	{
-		health = health;
-	}
 };
 
 Character::Character()
@@ -78,8 +73,6 @@ bool Character::Attack(Character& Target)
 
 void Character::GetHit(unsigned int dmg, dmgtype type)
 {
-	int h = health;
-	health = health;
 	if (type == physic)
 	{
 		if (dmg - meleeDEF > 0)
@@ -99,8 +92,6 @@ void Character::GetHit(unsigned int dmg, dmgtype type)
 		health = 0; 
 	}
 	
-	h = health;
-	health = health;
 };
 
 void Character::LevelUP()

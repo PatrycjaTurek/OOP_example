@@ -94,7 +94,7 @@ bool Cleric::FindToHeal(std::vector<Fighter>& Teammates)
 		}
 		iterator++;
 	}
-	if (whichOne = -1)
+	if (whichOne == -1)
 	{
 		return false;
 	}
