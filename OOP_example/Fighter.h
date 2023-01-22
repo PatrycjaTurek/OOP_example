@@ -10,7 +10,5 @@ public:
 	void LevelUP();
 
 	friend class Cleric;
-	friend void DebuffDMG();//TODO
-	friend void DebuffDEF();//TODO
 };
 

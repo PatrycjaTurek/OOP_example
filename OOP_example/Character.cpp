@@ -114,7 +114,7 @@ void Character::GetHit(int dmg, dmgtype type)
 
 void Character::LevelUP()
 {
-	maxhealth += rand() % (level + 5 ) + 5 ;
+	maxhealth += rand() % (level + 5 ) + 5+ level ;
 	maxmagicDEF += rand() % level + 5;
 	maxmeleeDEF += rand() % level  +2;
 	maxmeleeDMG += rand() % (level + 5) + 5 ;

@@ -1,8 +1,14 @@
 #pragma once
+#include "SDLClass.h"
 #include "Cleric.h"
 
-class Game
+class Game: public SDLClass
 {
+	int shift_Y = floor(screenHeight / (4 * sizeOfTeam + 1)); //ratio used to render
+	int shift_X = floor(screenWidth / 10); //ratio used to render
+	SDL_Rect rectangle; //used to render sprits
+
+
 	unsigned int roomsLEFT;// game can't go forever
 	unsigned int turn;// if game's during turn or other part of game
 	unsigned int charactersLevel;//level of PC, on it depends enemies' level
@@ -18,6 +24,10 @@ class Game
 	void LevelUP();
 
 	void DoPC_Turn();// now it only make cleric-type character paly their turn
+	void RenderRoom();
+	void RenderNEWRoom();
+	void RenderCharacters(std::string, std::string);
+	void RenderCharacters(std::string);//turn of character controlled by player 
 
 public:
 	bool keepGoing; // if game should keep going or end

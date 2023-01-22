@@ -8,7 +8,7 @@ Fighter::Fighter()
 Fighter::Fighter(std::string name, unsigned level)
 {
 	this->name = name;
-	this->level = level;
+	this->level = 1;
 	maxhealth = 30;
 	health = 30;
 	maxmeleeDMG = 8;
@@ -33,10 +33,11 @@ Fighter::~Fighter()
 }
 void Fighter::LevelUP()
 {
+	level++;
 	maxhealth += rand() % (level + 5) + 2*level;
 	maxmagicDEF += rand() % level +  5;
 	maxmeleeDEF += rand() % level + 2;
-	maxmeleeDMG += rand() % (level + 5) + 5;
+	maxmeleeDMG += rand() % (level + 5) + level;
 	ResetStats();
 };
 /*

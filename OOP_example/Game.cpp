@@ -23,6 +23,8 @@ Game::Game()
 	
 	PlayersCleric = new Cleric("Cleric ", charactersLevel); // he's not in vector of PCs beacuse he can't win game alone
 
+
+	Init();
 	PrepareRoom();
 	system("CLS");// to clear console from characters Empty Teams couts
 
@@ -60,6 +62,8 @@ void Game::DoPC_Turn()
 
 		}
 	}
+	RenderRoom();
+	RenderCharacters(PlayersCleric->name);
 };
 
 void Game::PlayerTeamAttack()
@@ -69,6 +73,7 @@ void Game::PlayerTeamAttack()
 
 	for (auto& tmpPlayer : PlayerTeam)
 	{
+		RenderRoom();
 		if (EnemyTeam.empty())
 		{
 			return;
@@ -77,6 +82,7 @@ void Game::PlayerTeamAttack()
 		{
 			if (!tmpPlayer.Attack(EnemyTeam.back() ) )
 			{
+				RenderCharacters(tmpPlayer.name, EnemyTeam.back().name);
 				EnemyTeam.pop_back();  // character's dead delete this character
 			}
 		}
@@ -85,6 +91,7 @@ void Game::PlayerTeamAttack()
 			int tmp = rand() % EnemyTeam.size();
 			if (!tmpPlayer.Attack(EnemyTeam[tmp]))
 			{
+				RenderCharacters(tmpPlayer.name, EnemyTeam[tmp].name);
 				EnemyTeam.erase(EnemyTeam.begin() + tmp);  // character's dead delete this character
 			}
 		}
@@ -102,6 +109,7 @@ void Game::EnemyTeamAttack()
 		if (rand() % (PlayerTeam.size() + 1) == 0 && PlayersCleric->getHealth() >0) //check if enemy kill cleric
 		{
 			tmpEnemy.Attack(*PlayersCleric);
+			RenderCharacters(tmpEnemy.name, PlayersCleric->name);
 			continue; // to skip rest of loop
 		}
 
@@ -109,6 +117,7 @@ void Game::EnemyTeamAttack()
 		{
 			if (!tmpEnemy.Attack(PlayerTeam.back()))
 			{
+				RenderCharacters(tmpEnemy.name, PlayerTeam.back().name);
 				PlayerTeam.pop_back();  // character's dead delete this character
 			}
 		}
@@ -117,6 +126,7 @@ void Game::EnemyTeamAttack()
 			int tmp = rand() % PlayerTeam.size();
 			if (!tmpEnemy.Attack(PlayerTeam[tmp]))
 			{
+				RenderCharacters(tmpEnemy.name, PlayerTeam[tmp].name);
 				PlayerTeam.erase(PlayerTeam.begin() + tmp); // character's dead delete this character
 			}
 		}
@@ -126,8 +136,11 @@ void Game::EnemyTeamAttack()
 
 void Game::PlayATurn()
 {
+	
+	CheckForEvents();
+
 	//check if game has ended 
-	if (roomsLEFT == 0)
+	if (roomsLEFT == 0 || exitprogram)
 	{
 		win = true;
 		keepGoing = false;
@@ -139,10 +152,11 @@ void Game::PlayATurn()
 		keepGoing = false;
 		return;
 	}
+
 	//if game didn't end proceed with checking if room's enmpty
 	if(EnemyTeam.empty())
 	{
-		std::cout << "\n\nRoom's empty "<< turn<<"\n\n";
+		std::cout << "\n\nRoom "<< turn<<" is empty\n\n";
 		score += 100;
 
 		if (TurnsUntilLevelUP == 0)// if players team should level now
@@ -153,15 +167,25 @@ void Game::PlayATurn()
 		TurnsUntilLevelUP--;
 		PrepareRoom(); // spawn enemy team
 	}
-	turn++;
 
 	PlayerTeamAttack(); //player team's turn
 	EnemyTeamAttack(); //enemy's turn
 };
 void Game::PrepareRoom()
 {
+	std::cout << "\n \t new room was made\n";
 	turn++;
+	if (rand()% 20 <= 5 && EnemyTeam.size() <= 5)
+	{
+		sizeOfEnemyTeam++;
+	}
+	else if (rand()% 20 > 18)
+	{
+		sizeOfEnemyTeam--;
+	}
+
 	charactersLevel += rand() %4 -2 ;
+	SDL_SetTextureColorMod(GoblinSprite.mTexture, rand() & 22 * 10 + 10, rand() & 22 * 10 + 10, rand() & 22 * 10 + 10);
 	for (int i = 0; i < sizeOfEnemyTeam; i++)
 	{
 		Character* Enemy = new Character(("Goblin" + std::to_string(i + 1)), charactersLevel);
@@ -193,3 +217,126 @@ void Game::LevelUP()
 		tmpPlayer.LevelUP();
 	}
 };
+
+
+void Game::RenderRoom()
+{
+	SDL_RenderClear(gRenderer);
+	Background.Render(gRenderer);
+	shift_Y = floor(screenHeight / (4 * sizeOfTeam + 1));
+	shift_X = floor(screenWidth / 10);
+
+}
+
+void Game::RenderCharacters(std::string attacker, std::string attackee)
+{
+
+	RenderRoom();
+
+
+	rectangle.y = ceil(screenHeight / 2) + shift_Y * (PlayerTeam.size() - 1);
+	rectangle.w = shift_X;
+	rectangle.h = shift_Y;
+
+	if (PlayersCleric->name == attackee)
+	{
+		rectangle.x = floor(shift_X /2 );
+
+		ClericSprite.Render(gRenderer, &rectangle);
+		rectangle.y -= shift_Y;
+	}
+	else if (PlayersCleric->getHealth() > 0)
+	{
+		rectangle.x = shift_X;
+		ClericSprite.Render(gRenderer, &rectangle);
+	}
+
+
+	rectangle.y = ceil(screenHeight / 2);
+
+	for (auto& tmpChar : PlayerTeam)
+	{
+		rectangle.x = shift_X * 3;
+
+		if (attacker == tmpChar.name)
+		{
+			rectangle.x += shift_X;
+		}
+		else if (attackee == tmpChar.name)
+		{
+			rectangle.x -= shift_X;
+		}
+		FighterSprite.Render(gRenderer, &rectangle);
+		rectangle.y += 2 * shift_Y;
+	}
+	if (sizeOfEnemyTeam < 4)
+	{
+		rectangle.y = ceil(screenHeight / 2);
+	}
+	else
+	{
+		rectangle.y = ceil(screenHeight / 3);
+	}
+
+
+	for (auto& tmpChar : EnemyTeam)
+	{
+		rectangle.x = (screenWidth - (shift_X * 3));
+		if (attacker == tmpChar.name)
+		{
+			rectangle.x -= shift_X;
+		}
+		else if (attackee == tmpChar.name)
+		{
+			rectangle.x += shift_X;
+		}
+		GoblinSprite.Render(gRenderer, &rectangle);
+		rectangle.y += 2 * shift_Y;
+	}
+	limitingFrames();
+	SDL_RenderPresent(gRenderer);
+};
+
+void Game::RenderCharacters(std::string attacker)
+{
+	RenderRoom();
+
+	if (PlayersCleric->getHealth() > 0)
+	{
+		rectangle.x = 2* shift_X;
+		rectangle.y = ceil( screenHeight / 2) + shift_Y * (PlayerTeam.size() -1 ) ;
+		rectangle.w = shift_X;
+		rectangle.h = shift_Y;
+		ClericSprite.Render(gRenderer, &rectangle);
+	}
+
+
+	rectangle.y = ceil(screenHeight / 2);
+	rectangle.x = shift_X * 3;
+
+	for (auto& tmpChar : PlayerTeam)
+	{
+		FighterSprite.Render(gRenderer, &rectangle);
+		rectangle.y += 2 * shift_Y;
+	}
+
+	rectangle.x = (screenWidth - (shift_X * 2));
+
+	if (sizeOfEnemyTeam < 4)
+	{
+		rectangle.y = ceil(screenHeight / 2);
+	}
+	else
+	{
+		rectangle.y = ceil(screenHeight / 3);
+	}
+
+	for (auto& tmpChar : EnemyTeam)
+	{
+		GoblinSprite.Render(gRenderer, &rectangle);
+		rectangle.y += 2 * shift_Y;
+	}
+	limitingFrames();
+	SDL_RenderPresent(gRenderer);
+}
+
