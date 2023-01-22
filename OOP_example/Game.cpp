@@ -10,9 +10,9 @@ Game::Game()
 	win = false;
 	sizeOfTeam = 3;
 	sizeOfEnemyTeam = 2;
-	EmptyTeams();
+	EmptyTeams();// clear memory , just for be sure
 
-	unsigned charactersLevel = rand()% 5 + 2;
+	charactersLevel = rand()% 5 + 2;
 
 	for (int i = 0; i < sizeOfTeam; i++)
 	{
@@ -24,7 +24,7 @@ Game::Game()
 	PlayersCleric = new Cleric("Cleric ", charactersLevel); // he's not in vector of PCs beacuse he can't win game alone
 
 	PrepareRoom();
-	system("CLS");// to clear feedback from characters econstructor from Empty Teams
+	system("CLS");// to clear console from characters Empty Teams couts
 
 };
 Game::~Game()
@@ -42,13 +42,14 @@ Game::~Game()
 	EmptyTeams();
 };
 
-void Game::PlayerTeamAttack()
-{
+void Game::DoPC_Turn()
+{//TODO change it to be controlable by player
+//check if character's still alive
 	if (PlayersCleric->getHealth() > 0)
 	{
-		if (!PlayersCleric->FindToHeal(PlayerTeam))
+		if (!PlayersCleric->FindToHeal(PlayerTeam))//if there's noone to heal cleric will pray to weak their enemies
 		{
-			if (EnemyTeam.size() > 1)
+			if (EnemyTeam.size() > 1 & rand() % 20 >= 15)// if enemy team has more that 1 member and "roll" 15 or more it will debuff 2 enemies
 			{
 				PlayersCleric->Attack(EnemyTeam[rand() % EnemyTeam.size()], EnemyTeam[rand() % EnemyTeam.size()]);//but pacifist way
 			}
@@ -56,9 +57,15 @@ void Game::PlayerTeamAttack()
 			{
 				PlayersCleric->Attack(EnemyTeam[rand() % EnemyTeam.size()]);//but pacifist way
 			}
-		
+
 		}
 	}
+};
+
+void Game::PlayerTeamAttack()
+{
+
+	DoPC_Turn(); // Cleric is little different than other in this team
 
 	for (auto& tmpPlayer : PlayerTeam)
 	{
@@ -92,13 +99,13 @@ void Game::EnemyTeamAttack()
 		{
 			return;
 		}
-		if (rand() % (PlayerTeam.size() + 1) == 0 && PlayersCleric->getHealth() >0) //if enemy kill cleric
+		if (rand() % (PlayerTeam.size() + 1) == 0 && PlayersCleric->getHealth() >0) //check if enemy kill cleric
 		{
 			tmpEnemy.Attack(*PlayersCleric);
 			continue; // to skip rest of loop
 		}
 
-		if (PlayerTeam.size() == 1)
+		if (PlayerTeam.size() == 1)// to not use rand if there's only 1 enemy
 		{
 			if (!tmpEnemy.Attack(PlayerTeam.back()))
 			{
@@ -119,6 +126,7 @@ void Game::EnemyTeamAttack()
 
 void Game::PlayATurn()
 {
+	//check if game has ended 
 	if (roomsLEFT == 0)
 	{
 		win = true;
@@ -131,28 +139,29 @@ void Game::PlayATurn()
 		keepGoing = false;
 		return;
 	}
+	//if game didn't end proceed with checking if room's enmpty
 	if(EnemyTeam.empty())
 	{
-		std::cout << "Room's empty "<< turn<<"\n";
+		std::cout << "\n\nRoom's empty "<< turn<<"\n\n";
 		score += 100;
 
-		if (TurnsUntilLevelUP == 0)
+		if (TurnsUntilLevelUP == 0)// if players team should level now
 		{
 			LevelUP();
-			TurnsUntilLevelUP = 6;
+			TurnsUntilLevelUP = 6;// set next level up at 6 rooms from now
 		}
 		TurnsUntilLevelUP--;
-		PrepareRoom();
+		PrepareRoom(); // spawn enemy team
 	}
 	turn++;
 
-	PlayerTeamAttack();
-	EnemyTeamAttack();
+	PlayerTeamAttack(); //player team's turn
+	EnemyTeamAttack(); //enemy's turn
 };
 void Game::PrepareRoom()
 {
 	turn++;
-	unsigned charactersLevel = rand() % (5 +turn) + turn;
+	charactersLevel += rand() %4 -2 ;
 	for (int i = 0; i < sizeOfEnemyTeam; i++)
 	{
 		Character* Enemy = new Character(("Goblin" + std::to_string(i + 1)), charactersLevel);

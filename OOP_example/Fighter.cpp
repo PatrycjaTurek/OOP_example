@@ -20,6 +20,8 @@ Fighter::Fighter(std::string name, unsigned level)
 	meleeDEF = 8;
 	magicDEF = 1;
 
+	wounded = false;
+
 	while(this->level < level)
 	{
 		LevelUP();

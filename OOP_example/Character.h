@@ -7,28 +7,34 @@ protected:
 
 	int health;
 	int level;
-	int maxhealth;
+	int maxhealth; 
+
 	int maxmeleeDMG;
 	int maxmeleeDEF;
+	
+	//magic demage will be added later TODO
+	int magicDEF;//after de/ -buffing
 	int maxmagicDEF;
+
+	bool wounded;//if that character has health < maxhealth
 
 	int meleeDMG;//after de/ -buffing
 	int meleeDEF;//after de/ -buffing
-	int magicDEF;//after de/ -buffing
-	void ResetStats();
-	void ResetBuffs();
+
+	void ResetStats();//  set health to max and call ResetBuffs()
+	void ResetBuffs(); //set damage and defence stats to max option 
 
 public: 
 
 	Character();
 	~Character();
-	Character(std::string, int);
-	int getHealth() { return this->health; };
+	Character(std::string, int); //making character, take name and level
+	int getHealth() { return this->health; }; // return unaccesable variable encapsulation example
 //	int Attack();
-	bool Attack(Character&);
-	void GetHit(int, dmgtype);
-	void LevelUP();
-	void DecreaseDMG(int);
+	bool Attack(Character&); // return true on succesfull attack( or other action)
+	void GetHit(int, dmgtype);// calculate result of getting hit, take flat dmg and dmg type
+	void LevelUP();// strenght stats and heal up
+	void DecreaseDMG(int);// //
 	void DecreaseDEF(int);
 
 
