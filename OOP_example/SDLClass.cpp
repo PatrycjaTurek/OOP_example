@@ -60,7 +60,7 @@ void SDLClass::Init()
 	minScreenHeight = ceil(dm.h * 0.6);
 
 	//Create window\ SDL_WINDOW_RESIZABLE:
-	gWindow = SDL_CreateWindow("Mood Calendar", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_RESIZABLE);
+	gWindow = SDL_CreateWindow("Goblin dungeon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_RESIZABLE);
 	if (gWindow == NULL)
 	{
 		std::cout << "Window could not be created!" << SDL_GetError() << std::endl;
