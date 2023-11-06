@@ -37,12 +37,10 @@ Cleric::Cleric(std::string name, unsigned level)
 
 Cleric::Cleric()
 {
-
 };
 
 Cleric::~Cleric()
 {
-
 };
 
 void Cleric::Heal(Fighter &Target)

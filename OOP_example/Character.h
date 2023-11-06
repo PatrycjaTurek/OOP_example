@@ -27,19 +27,17 @@ protected:
 public: 
 
 	Character();
-	~Character();
+	virtual ~Character();
 	Character(std::string, int); //making character, take name and level
 	int getHealth() { return this->health; }; // return unaccesable variable encapsulation example
 //	int Attack();
-	bool Attack(Character&); // return true on succesfull attack( or other action)
-	void GetHit(int, dmgtype);// calculate result of getting hit, take flat dmg and dmg type
-	void LevelUP();// strenght stats and heal up
-	void DecreaseDMG(int);// //
-	void DecreaseDEF(int);
+	virtual bool Attack(Character&); // return true on succesfull attack( or other action)
+	virtual void GetHit(int, dmgtype);// calculate result of getting hit, take flat dmg and dmg type
+	virtual void LevelUP();// strenght stats and heal up
+	virtual void DecreaseDMG(int);// //
+	virtual void DecreaseDEF(int);
 
 
 	std::string name;
 
-					  
-	//	void UseItem(Item);
 };

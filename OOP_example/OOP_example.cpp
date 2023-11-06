@@ -15,5 +15,6 @@ int main(int argc, char* args[])
 		G->PlayATurn();
 	}
 	G->~Game(); //needed to call deconstructor cuz of dynamic object
+	delete G;
 	return 1;
 }

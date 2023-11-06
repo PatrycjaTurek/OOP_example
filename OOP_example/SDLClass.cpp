@@ -86,6 +86,7 @@ void SDLClass::Init()
 		this->LoadMedia();
 	}
 
+
 }
 
 void SDLClass::LoadMedia()
@@ -152,6 +153,9 @@ void SDLClass::checkForWindowEvent()
 				SDL_SetWindowSize(gWindow, screenWidth, screenHeight);
 
 			}
+
+			delete width_handler;
+			delete height_handler;
 			render = true;
 			break;
 		}

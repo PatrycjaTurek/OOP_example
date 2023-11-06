@@ -45,8 +45,7 @@ Game::~Game()
 };
 
 void Game::DoPC_Turn()
-{//TODO change it to be controlable by player
-//check if character's still alive
+{
 	if (PlayersCleric->getHealth() > 0)
 	{
 		if (!PlayersCleric->FindToHeal(PlayerTeam))//if there's noone to heal cleric will pray to weak their enemies
@@ -59,7 +58,6 @@ void Game::DoPC_Turn()
 			{
 				PlayersCleric->Attack(EnemyTeam[rand() % EnemyTeam.size()]);//but pacifist way
 			}
-
 		}
 	}
 	RenderRoom();
@@ -132,6 +130,7 @@ void Game::EnemyTeamAttack()
 		}
 		int i = 0;
 	}
+
 };
 
 void Game::PlayATurn()
@@ -170,7 +169,12 @@ void Game::PlayATurn()
 
 	PlayerTeamAttack(); //player team's turn
 	EnemyTeamAttack(); //enemy's turn
+
+
 };
+
+
+
 void Game::PrepareRoom()
 {
 	std::cout << "\n \t new room was made\n";
@@ -185,10 +189,13 @@ void Game::PrepareRoom()
 	}
 
 	charactersLevel += rand() %4 -2 ;
+
+
 	SDL_SetTextureColorMod(GoblinSprite.mTexture, rand() & 22 * 10 + 10, rand() & 22 * 10 + 10, rand() & 22 * 10 + 10);
 	for (int i = 0; i < sizeOfEnemyTeam; i++)
 	{
-		Character* Enemy = new Character(("Goblin" + std::to_string(i + 1)), charactersLevel);
+
+		Character *Enemy = new Character(("Goblin" + std::to_string(i + 1)), charactersLevel);
 		EnemyTeam.push_back(*Enemy);
 		delete Enemy;
 	}
@@ -233,10 +240,10 @@ void Game::RenderCharacters(std::string attacker, std::string attackee)
 
 	RenderRoom();
 
-
 	rectangle.y = ceil(screenHeight / 2) + shift_Y * (PlayerTeam.size() - 1);
 	rectangle.w = shift_X;
 	rectangle.h = shift_Y;
+
 
 	if (PlayersCleric->name == attackee)
 	{
@@ -250,7 +257,6 @@ void Game::RenderCharacters(std::string attacker, std::string attackee)
 		rectangle.x = shift_X;
 		ClericSprite.Render(gRenderer, &rectangle);
 	}
-
 
 	rectangle.y = ceil(screenHeight / 2);
 
@@ -338,5 +344,6 @@ void Game::RenderCharacters(std::string attacker)
 	}
 	limitingFrames();
 	SDL_RenderPresent(gRenderer);
+//	SDL_Delay(500);
 }
 
